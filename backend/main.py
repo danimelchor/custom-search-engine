@@ -8,7 +8,7 @@ from sources.Base import Base
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000"])
+CORS(app, origins=["http://localhost:3000", "chrome-extension://ccbdkdfahhkhaclplplpjgdbngfmkogn"])
 SOURCES: List[Base] = None
 
 @app.route('/search', methods=['GET'])

@@ -102,4 +102,4 @@ class FileEngine(Base):
                     source="Files"
                   )
                 )
-    return res[:5]
+    return res[:self.max_results]

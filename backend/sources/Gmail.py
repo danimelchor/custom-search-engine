@@ -22,7 +22,7 @@ class GmailEngine(Base):
 					userId='me',
 					q=f"category:primary {query}"
 				).execute()
-				message_ids = [r['id'] for r in response.get('messages', [])][:5]
+				message_ids = [r['id'] for r in response.get('messages', [])][:self.max_results]
 				for message_id in message_ids:
 					e = service.users().messages().get(
 						userId='me',

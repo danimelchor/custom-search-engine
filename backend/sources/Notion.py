@@ -28,7 +28,7 @@ class NotionEngine(Base):
 			
 			response = requests.post(self.url, json=payload, headers=self.headers)
 			if response.status_code == 200:
-				res_json = response.json()['results'][:5]
+				res_json = response.json()['results'][:self.max_results]
 				res = map(lambda x: Result(
 					title=x['properties']['title']['title'][0]["plain_text"], 
 					url=x["url"],

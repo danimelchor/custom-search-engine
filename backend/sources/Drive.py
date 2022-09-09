@@ -22,7 +22,7 @@ class DriveEngine(Base):
           spaces='drive',
           fields='files(name, webViewLink, mimeType)'
         ).execute()
-        files = response.get('files', [])[:5]
+        files = response.get('files', [])[:self.max_results]
     except HttpError as error:
         print(F'An error occurred: {error}')
 
