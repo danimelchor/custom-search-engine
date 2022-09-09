@@ -1,5 +1,6 @@
 
-from typing import Tuple
+from typing import Callable, Tuple
+import threading
 import optparse
 
 
@@ -20,3 +21,9 @@ def parse_args() -> Tuple[str, int]:
 
     print(options.host, options.port)
     return (options.host, int(options.port))
+
+def run_in_thread(func: Callable, *args, **kwargs) -> threading.Thread:
+    """Run the given function in a new thread with parameters."""
+    thread = threading.Thread(target=func, args=args, kwargs=kwargs, daemon=True)
+    thread.start()
+    return thread

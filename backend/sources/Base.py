@@ -7,5 +7,5 @@ class Base:
     self.name = name
     self.max_results = config.get("max_results")
 
-  def search(self, query: str) -> List[Result]:
+  def search(self, query: str, result: list) -> List[Result]:
     raise NotImplementedError

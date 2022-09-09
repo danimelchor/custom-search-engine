@@ -82,7 +82,7 @@ class FileEngine(Base):
   def _should_use(self, name: str) -> bool:
     return re.match(IGNORED_PATTERNS, name) is None
 
-  def search(self, query: str) -> List[Result]:
+  def search(self, query: str, results: list) -> List[Result]:
     res = []
     for root in roots_to_look_in:
       for curr, dirs, files in os.walk(root):
@@ -102,4 +102,4 @@ class FileEngine(Base):
                     source="Files"
                   )
                 )
-    return res[:self.max_results]
+    results.extend(res[:self.max_results])

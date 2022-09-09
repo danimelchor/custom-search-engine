@@ -11,7 +11,7 @@ class GmailEngine(Base):
 	def __init__(self, config: dict, name: str) -> None:
 		super().__init__(config, name)
 
-	def search(self, query: str) -> List[Result]:
+	def search(self, query: str, results: list) -> List[Result]:
 		creds = get_google_creds()
 
 		emails = []
@@ -54,4 +54,4 @@ class GmailEngine(Base):
 			source="Gmail",
 			type="email"
 		), emails)
-		return list(res)
+		results.extend(res)

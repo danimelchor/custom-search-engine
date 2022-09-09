@@ -1,3 +1,4 @@
+import threading
 from typing import List
 from urllib import request
 from flask import Flask, request, jsonify
@@ -6,9 +7,10 @@ from sources import init_sources
 from custom_types import Result
 from sources.Base import Base
 from flask_cors import CORS
+from utils import run_in_thread
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000", "chrome-extension://ccbdkdfahhkhaclplplpjgdbngfmkogn"])
+CORS(app, origins=["http://localhost:3000"])
 SOURCES: List[Base] = None
 
 @app.route('/search', methods=['GET'])
@@ -16,15 +18,19 @@ def search():
     params = request.args
     query = params.get('q')
 
-    results: List[Result] = []
-
     sources = [s.strip().split(":")[1] for s in query.split(" ") if s.startswith("in:")]
     query = " ".join([s for s in query.split(" ") if not s.startswith("in:")])
 
+    results: List[Result] = []
+    threads: List[threading.Thread] = []
     for source in SOURCES:
         if not sources or source.name in sources:
-            r: Result = source.search(query)
-            results.extend(r)
+            thread = run_in_thread(source.search, query=query, results=results)
+            threads.append(thread)
+
+    # Wait for all threads to finish
+    for thread in threads:
+        thread.join()
 
     serialized = [r.serialize() for r in results]
     return jsonify(serialized)

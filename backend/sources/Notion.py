@@ -10,13 +10,14 @@ class NotionEngine(Base):
 				self.config = config
 				self.url = config['notion']['url']
 				self.token = config['notion']['api_key']
-				self.headers = {
-						'Authorization': 'Bearer ' + self.token,
-						'Content-Type': 'application/json',
-						'Notion-Version': '2022-06-28'
-				}
 				
-		def search(self, query: str) -> List[Result]:
+		def search(self, query: str, results: list) -> List[Result]:
+			headers = {
+					'Authorization': 'Bearer ' + self.token,
+					'Content-Type': 'application/json',
+					'Notion-Version': '2022-06-28'
+			}
+
 			payload = {
 					"query": query,
 					"sort": {
@@ -26,7 +27,7 @@ class NotionEngine(Base):
 					"page_size": 100
 			}
 			
-			response = requests.post(self.url, json=payload, headers=self.headers)
+			response = requests.post(self.url, json=payload, headers=headers)
 			if response.status_code == 200:
 				res_json = response.json()['results'][:self.max_results]
 				res = map(lambda x: Result(
@@ -35,7 +36,6 @@ class NotionEngine(Base):
 					source="Notion",
 					type="notion"
 				), res_json)
-				return list(res)
-			else:
-				return []
+				results.extend(res)
+			
 

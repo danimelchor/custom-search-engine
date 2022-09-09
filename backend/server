@@ -1,6 +1,5 @@
 #!/Users/danielmelchor/Documents/CodeProjects/search-engine/backend/venv/bin/python3
 
-import sys
 from main import start_server
 from utils import parse_args
 
