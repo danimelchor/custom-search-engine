@@ -18,9 +18,13 @@ def search():
 
     results: List[Result] = []
 
+    sources = [s.strip().split(":")[1] for s in query.split(" ") if s.startswith("in:")]
+    query = " ".join([s for s in query.split(" ") if not s.startswith("in:")])
+
     for source in SOURCES:
-        r: Result = source.search(query)
-        results.extend(r)
+        if not sources or source.name in sources:
+            r: Result = source.search(query)
+            results.extend(r)
 
     serialized = [r.serialize() for r in results]
     return jsonify(serialized)

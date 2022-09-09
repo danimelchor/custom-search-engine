@@ -5,8 +5,8 @@ import requests
 
 
 class NotionEngine(Base):
-		def __init__(self, config):
-				super().__init__(config)
+		def __init__(self, config: dict, name: str):
+				super().__init__(config, name)
 				self.config = config
 				self.url = config['notion']['url']
 				self.token = config['notion']['api_key']

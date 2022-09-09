@@ -8,8 +8,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 class GmailEngine(Base):
-	def __init__(self, config: dict) -> None:
-		super().__init__(config)
+	def __init__(self, config: dict, name: str) -> None:
+		super().__init__(config, name)
 
 	def search(self, query: str) -> List[Result]:
 		creds = get_google_creds()
@@ -20,7 +20,7 @@ class GmailEngine(Base):
 				emails = []
 				response = service.users().messages().list(
 					userId='me',
-					q=query
+					q=f"category:primary {query}"
 				).execute()
 				message_ids = [r['id'] for r in response.get('messages', [])][:5]
 				for message_id in message_ids:
@@ -36,9 +36,6 @@ class GmailEngine(Base):
 							title = header['value']
 							break
 
-					with open("emails.json", "w") as f:
-						f.write(json.dumps(e, indent=4))
-
 					e = {
 						"snippet": e['snippet'],
 						"title": title,
@@ -47,7 +44,7 @@ class GmailEngine(Base):
 					emails.append(e)
 					
 		except HttpError as error:
-				print(F'An error occurred: {error}')
+				print(f'An error occurred: {error}')
 				emails = []
 
 		res = map(lambda x: Result(

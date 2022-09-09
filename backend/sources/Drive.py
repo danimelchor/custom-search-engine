@@ -8,8 +8,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 class DriveEngine(Base):
-  def __init__(self, config: dict) -> None:
-    super().__init__(config)
+  def __init__(self, config: dict, name: str) -> None:
+    super().__init__(config, name)
 
   def search(self, query: str) -> List[Result]:
     creds = get_google_creds()
