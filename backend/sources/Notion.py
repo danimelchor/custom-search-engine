@@ -30,12 +30,21 @@ class NotionEngine(Base):
 			response = requests.post(self.url, json=payload, headers=headers)
 			if response.status_code == 200:
 				res_json = response.json()['results'][:self.max_results]
-				res = map(lambda x: Result(
-					title=x['properties']['title']['title'][0]["plain_text"], 
-					url=x["url"],
-					source="Notion",
-					type="notion"
-				), res_json)
+				res = []
+				for r in res_json:
+					# Ensure title exists
+					if (
+						'Name' in r['properties'] and
+					 	'title' in r['properties']['Name'] and
+					 	len(r['properties']['Name']['title']) > 0 and
+					 	'plain_text' in r['properties']['Name']['title'][0]
+					):
+						res.append(Result(
+							title=r['properties']['Name']['title'][0]["plain_text"], 
+							action="open_browser",
+							action_args=f"notion://{r['url']}",
+							type="notion"
+						))
 				results.extend(res)
 			
 

@@ -50,8 +50,8 @@ class GmailEngine(Base):
 		res = map(lambda x: Result(
 			title=x['title'],
 			description=x['snippet'],
-			url=x['url'],
-			source="Gmail",
+			action="open_browser",
+			action_args=x['url'],
 			type="email"
 		), emails)
 		results.extend(res)

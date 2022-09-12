@@ -1,16 +1,16 @@
 class Result:
-    def __init__(self, source: str, title: str, url: str, type: str, description: str = None) -> None:
-        self.source = source
+    def __init__(self, title: str, action: str, action_args: str, type: str, description: str = None) -> None:
         self.title = title
         self.description = description
-        self.url = url
+        self.action = action
+        self.action_args = action_args
         self.type = type
 
     def serialize(self) -> dict:
         return {
-            "source": self.source,
             "title": self.title,
             "description": self.description,
-            "url": self.url,
+            "action": self.action,
+            "action_args": self.action_args,
             "type": self.type
         }

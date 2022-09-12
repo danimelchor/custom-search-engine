@@ -21,6 +21,9 @@ def search():
     sources = [s.strip().split(":")[1] for s in query.split(" ") if s.startswith("in:")]
     query = " ".join([s for s in query.split(" ") if not s.startswith("in:")])
 
+    if not query:
+        return jsonify([])
+
     results: List[Result] = []
     threads: List[threading.Thread] = []
     for source in SOURCES:

@@ -28,8 +28,8 @@ class DriveEngine(Base):
 
     res = map(lambda x: Result(
       title=x["name"],
-      url=x["webViewLink"],
+      action="open_browser",
+      action_args=x["webViewLink"],
       type=x["mimeType"],
-      source="Google Drive"
     ), files)
     results.extend(res)

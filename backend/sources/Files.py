@@ -80,7 +80,7 @@ class FileEngine(Base):
     return list(filter(lambda d: self._should_use(d), dirs))
 
   def _should_use(self, name: str) -> bool:
-    return re.match(IGNORED_PATTERNS, name) is None
+    return re.match(IGNORED_PATTERNS, name, re.IGNORECASE) is None
 
   def search(self, query: str, results: list) -> List[Result]:
     res = []
@@ -88,18 +88,29 @@ class FileEngine(Base):
       for curr, dirs, files in os.walk(root):
         dirs[:] = self._ignore_dirs(dirs)
 
+        for dir in dirs:
+          if query in dir and self._should_use(dir):
+            res.append(Result(
+              title=dir,
+              action="open_finder",
+              action_args=os.path.join(curr, dir),
+              type="dir"
+            ))
+
         for file in files:
-            if query in file and self._should_use(file):
-                url = f"vscode://file/{os.path.join(curr, file)}"
+            if query in file.lower() and self._should_use(file):
                 is_code = file.split(".")[-1] in CODE_EXTENSIONS
                 is_image = file.split(".")[-1] in IMAGE_EXTENSIONS
                 type = "code" if is_code else "image" if is_image else "file"
+                path = os.path.join(curr, file)
+                if type == "code":
+                  path = "vscode://file/" + path
                 res.append(
                   Result(
                     title=curr + "/" + file,
-                    url=url,
+                    action="open_finder" if type != "code" else "open_browser",
+                    action_args=path,
                     type=type,
-                    source="Files"
                   )
                 )
     results.extend(res[:self.max_results])
