@@ -1,5 +1,5 @@
 import threading
-from typing import List
+from typing import Dict, List
 from urllib import request
 from flask import Flask, request, jsonify
 import yaml
@@ -24,7 +24,7 @@ def search():
     if not query:
         return jsonify([])
 
-    results: List[Result] = []
+    results: Dict[str, dict] = {}
     threads: List[threading.Thread] = []
     for source in SOURCES:
         if not sources or source.name in sources:
@@ -35,8 +35,7 @@ def search():
     for thread in threads:
         thread.join()
 
-    serialized = [r.serialize() for r in results]
-    return jsonify(serialized)
+    return jsonify(results)
 
     
 

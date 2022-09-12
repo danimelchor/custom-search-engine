@@ -54,4 +54,4 @@ class GmailEngine(Base):
 			action_args=x['url'],
 			type="email"
 		), emails)
-		results.extend(res)
+		self._save_results(list(res), results)

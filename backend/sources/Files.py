@@ -16,6 +16,8 @@ ignored_patterns_list = [
   r"^cache$",
   r"^dist$",
   r"^temp$",
+  r"^tmp$",
+  r".*undo.*",
 ]
 
 # Combine the regex patterns into one
@@ -91,11 +93,14 @@ class FileEngine(Base):
         for dir in dirs:
           if query in dir and self._should_use(dir):
             res.append(Result(
-              title=dir,
+              title=os.path.join(curr, dir) + "/",
               action="open_finder",
               action_args=os.path.join(curr, dir),
               type="dir"
             ))
+
+            if len(res) >= self.max_results:
+                  return self._save_results(res, results)
 
         for file in files:
             if query in file.lower() and self._should_use(file):
@@ -113,4 +118,7 @@ class FileEngine(Base):
                     type=type,
                   )
                 )
-    results.extend(res[:self.max_results])
+
+                if len(res) >= self.max_results:
+                  return self._save_results(res, results)
+    self._save_results(res, results)

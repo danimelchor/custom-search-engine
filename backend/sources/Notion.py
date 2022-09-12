@@ -45,6 +45,6 @@ class NotionEngine(Base):
 							action_args=f"notion://{r['url']}",
 							type="notion"
 						))
-				results.extend(res)
+				self._save_results(res, results)
 			
 

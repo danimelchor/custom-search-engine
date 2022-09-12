@@ -32,4 +32,4 @@ class DriveEngine(Base):
       action_args=x["webViewLink"],
       type=x["mimeType"],
     ), files)
-    results.extend(res)
+    self._save_results(list(res), results)
