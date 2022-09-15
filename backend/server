@@ -1,8 +1,0 @@
-#!/Users/danielmelchor/Documents/CodeProjects/search-engine/backend/venv/bin/python3
-
-from main import start_server
-from utils import parse_args
-
-if __name__ == '__main__':
-    host, port = parse_args()
-    start_server(host, port)
