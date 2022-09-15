@@ -1,3 +1,4 @@
+from typing import List
 from custom_types import Result
 from sources.Base import Base
 import aiohttp
@@ -6,13 +7,13 @@ import certifi
 
 
 class NotionEngine(Base):
-    def __init__(self, config: dict, name: str):
-        super().__init__(config, name)
+    def __init__(self, config: dict, name: str, priority: int = 0):
+        super().__init__(config, name, priority)
         self.config = config
         self.url = config["notion"]["url"]
         self.token = config["notion"]["api_key"]
 
-    async def search(self, query: str) -> None:
+    async def _search(self, query: str) -> List[Result]:
         headers = {
             "Authorization": "Bearer " + self.token,
             "Content-Type": "application/json",
@@ -55,4 +56,4 @@ class NotionEngine(Base):
                                     type="notion",
                                 )
                             )
-                    self._save_results(res, query)
+                    return res

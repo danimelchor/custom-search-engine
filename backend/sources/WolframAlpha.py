@@ -1,16 +1,17 @@
+from typing import List
 from custom_types import Result
 from sources.Base import Base
 import aiohttp
 
 
 class WolframAlphaEngine(Base):
-    def __init__(self, config: dict, name: str) -> None:
-        super().__init__(config, name)
+    def __init__(self, config: dict, name: str, priority: int = 0) -> None:
+        super().__init__(config, name, priority)
         self.units = config["units"]
         self.url = config["wolfram_alpha"]["url"]
         self.app_id = config["wolfram_alpha"]["app_id"]
 
-    async def search(self, query: str) -> None:
+    async def _search(self, query: str) -> List[Result]:
         async with aiohttp.ClientSession() as session:
             async with session.get(
                 self.url,
@@ -44,4 +45,4 @@ class WolframAlphaEngine(Base):
                     text_results,
                 )
 
-                self._save_results(list(rs), query, priority=1)
+                return list(rs)

@@ -14,6 +14,6 @@ def init_sources(config: dict):
         GmailEngine(config, "gmail"),
         FileEngine(config, "files"),
         FolderEngine(config, "folder"),
-        WolframAlphaEngine(config, "wolframalpha"),
-        ApplicationsEngine(config, "applications"),
+        WolframAlphaEngine(config, "wolframalpha", priority=1),
+        ApplicationsEngine(config, "applications", priority=2),
     ]

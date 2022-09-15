@@ -23,14 +23,14 @@ MIME_TO_TYPE = {
 
 
 class DriveEngine(Base):
-    def __init__(self, config: dict, name: str) -> None:
-        super().__init__(config, name)
+    def __init__(self, config: dict, name: str, priority: int = 0) -> None:
+        super().__init__(config, name, priority)
 
-    async def search(self, query: str) -> None:
+    async def _search(self, query: str) -> List[Result]:
         loop = asyncio.get_event_loop()
-        await loop.run_in_executor(None, self.sync_search, query)
+        return await loop.run_in_executor(None, self.sync_search, query)
 
-    def sync_search(self, query: str) -> None:
+    def sync_search(self, query: str) -> List[Result]:
         creds = get_google_creds()
         files = []
 
@@ -58,4 +58,4 @@ class DriveEngine(Base):
             ),
             files,
         )
-        self._save_results(list(res), query)
+        return list(res)
