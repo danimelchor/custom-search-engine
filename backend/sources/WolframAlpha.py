@@ -1,10 +1,10 @@
 from typing import List
 from custom_types import Result
-from sources.Base import Base
+from sources.Source import Source
 import aiohttp
 
 
-class WolframAlphaEngine(Base):
+class WolframAlphaEngine(Source):
     def __init__(self, config: dict, name: str, priority: int = 0) -> None:
         super().__init__(config, name, priority)
         self.units = config["units"]

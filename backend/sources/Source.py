@@ -3,13 +3,19 @@ from custom_types import Result
 import json
 
 
-class Base:
+class Source:
+    categories = []
+
     def __init__(self, config: dict, name: str, priority: int) -> None:
         self.config = config
         self.name = name
         self.max_results = config.get("max_results")
         self.max_description_length = config.get("max_description_length")
         self.priority = priority
+
+    @classmethod
+    def get_categories(cls) -> List[str]:
+        return cls.categories
 
     async def search(self, query: str) -> None:
         try:

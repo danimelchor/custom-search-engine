@@ -2,12 +2,12 @@ import asyncio
 from collections import defaultdict
 from typing import List
 from sources import init_sources
-from sources.Base import Base
+from sources.Source import Source
 from main import load_config
 import time
 
 
-async def search(query: str, sources: List[Base]) -> dict:
+async def search(query: str, sources: List[Source]) -> dict:
     results = defaultdict(list)
     for source in sources:
         now = time.time()

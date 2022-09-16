@@ -1,12 +1,12 @@
 from typing import List
-from sources.Base import Base
+from sources.Source import Source
 from custom_types import Result
 import os, re, asyncio
 
 from const import IGNORED_FOLDERS, ROOTS_TO_LOOK_IN, CODE_EXTENSIONS, IMAGE_EXTENSIONS
 
 
-class FileEngine(Base):
+class FileEngine(Source):
     def __init__(self, config: dict, name: str, priority: int = 0) -> None:
         super().__init__(config, name, priority)
 

@@ -1,25 +1,34 @@
 from typing import Dict, List
 import yaml
-from sources import init_sources
-from sources.Base import Base
+from sources import init_sources, CATEGORIES
+from sources.Source import Source
 from utils import parse_args
 import os
-import json
 import asyncio
+import classification
 
 
-async def search(query: str, sources: List[Base]) -> None:
+async def search(query: str) -> None:
     filters = [s.strip().split(":")[1] for s in query.split(" ") if s.startswith("in:")]
     query = " ".join([s for s in query.split(" ") if not s.startswith("in:")]).lower()
+
+    # Use ML to classify the query
+    cat_classifications = classification.classify_text(
+        query,
+        CATEGORIES,
+    )
+
+    # Load categories
+    config = load_config()
+    sources = init_sources(config, cat_classifications, filters)
 
     if not query:
         return
 
     tasks: List[asyncio.Task] = []
     for source in sources:
-        if not filters or source.name in filters:
-            task = source.search(query)
-            tasks.append(task)
+        task = source.search(query)
+        tasks.append(task)
 
     # Wait for all tasks to finish
     await asyncio.gather(*tasks)
@@ -37,10 +46,8 @@ def load_config():
 
 if __name__ == "__main__":
     query = parse_args()
-    config = load_config()
-    sources = init_sources(config)
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(search(query, sources))
+    loop.run_until_complete(search(query))
     loop.close()

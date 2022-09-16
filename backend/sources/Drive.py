@@ -1,5 +1,5 @@
 from typing import List
-from sources.Base import Base
+from sources.Source import Source
 from custom_types import Result
 
 from config.SetupGoogle import get_google_creds
@@ -22,7 +22,7 @@ MIME_TO_TYPE = {
 }
 
 
-class DriveEngine(Base):
+class DriveEngine(Source):
     def __init__(self, config: dict, name: str, priority: int = 0) -> None:
         super().__init__(config, name, priority)
 

@@ -1,10 +1,10 @@
 from typing import List
-from sources.Base import Base
+from sources.Source import Source
 from custom_types import Result
 import os, asyncio
 
 
-class ApplicationsEngine(Base):
+class ApplicationsEngine(Source):
     def __init__(self, config: dict, name: str, priority: int = 0) -> None:
         super().__init__(config, name, priority)
 

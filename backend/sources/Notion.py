@@ -1,12 +1,12 @@
 from typing import List
 from custom_types import Result
-from sources.Base import Base
+from sources.Source import Source
 import aiohttp
 import ssl
 import certifi
 
 
-class NotionEngine(Base):
+class NotionEngine(Source):
     def __init__(self, config: dict, name: str, priority: int = 0):
         super().__init__(config, name, priority)
         self.config = config

@@ -1,6 +1,6 @@
 from typing import List
 from config.SetupGoogle import get_google_creds
-from sources.Base import Base
+from sources.Source import Source
 from custom_types import Result
 
 from googleapiclient.discovery import build
@@ -9,7 +9,7 @@ from googleapiclient.errors import HttpError
 import asyncio
 
 
-class GmailEngine(Base):
+class GmailEngine(Source):
     def __init__(self, config: dict, name: str, priority: int = 0) -> None:
         super().__init__(config, name, priority)
 
